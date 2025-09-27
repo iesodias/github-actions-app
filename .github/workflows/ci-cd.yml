@@ -177,20 +177,14 @@ jobs:
     needs: build
     if: github.event_name != 'pull_request'
 
-    services:
-      app:
-        image: ${{ secrets.DOCKERHUB_USERNAME }}/task-manager:${{ github.sha }}
-        ports:
-          - 8000:8000
-        options: >-
-          --health-cmd "python -c 'import requests; requests.get(\"http://localhost:8000/api/health\")'"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Start application container
+        run: |
+          docker run -d -p 8000:8000 --name integration-test-app \
+            ${{ needs.build.outputs.image-tag }}
 
       - name: Wait for application to be ready
         run: |
@@ -230,6 +224,10 @@ jobs:
           curl -f http://localhost:8000/static/style.css
           curl -f http://localhost:8000/static/script.js
 
+      - name: Cleanup integration test container
+        if: always()
+        run: docker stop integration-test-app && docker rm integration-test-app
+
   # Performance Tests
   performance-test:
     name: Performance Tests
@@ -254,7 +252,7 @@ jobs:
         run: |
           # Start the application in background
           docker run -d -p 8000:8000 --name perf-test-app \
-            ${{ secrets.DOCKERHUB_USERNAME }}/task-manager:${{ github.sha }}
+            ${{ needs.build.outputs.image-tag }}
 
           # Wait for app to be ready
           timeout 60 bash -c 'until curl -f http://localhost:8000/api/health; do sleep 2; done'
