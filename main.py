@@ -6,8 +6,7 @@ from fastapi import Depends, FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
-from sqlalchemy import (Boolean, Column, DateTime, Integer, String,
-                        create_engine)
+from sqlalchemy import Boolean, Column, DateTime, Integer, String, create_engine
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
 
 app = FastAPI(
