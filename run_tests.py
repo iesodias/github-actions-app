@@ -2,9 +2,9 @@
 """
 Script para executar testes com diferentes opções de cobertura
 """
+import os
 import subprocess
 import sys
-import os
 
 
 def run_command(cmd, description):

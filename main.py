@@ -1,13 +1,14 @@
-from fastapi import FastAPI, HTTPException, Depends
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse
-from sqlalchemy import create_engine, Column, Integer, String, Boolean, DateTime
-from sqlalchemy.orm import declarative_base
-from sqlalchemy.orm import sessionmaker, Session
-from pydantic import BaseModel
+import os
 from datetime import datetime, timezone
 from typing import List, Optional
-import os
+
+from fastapi import Depends, FastAPI, HTTPException
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
+from sqlalchemy import (Boolean, Column, DateTime, Integer, String,
+                        create_engine)
+from sqlalchemy.orm import Session, declarative_base, sessionmaker
 
 app = FastAPI(
     title="DevOps Automation - Task Manager API",
