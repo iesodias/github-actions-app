@@ -7,8 +7,11 @@ from main import app, get_db, Base
 
 # Test database
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
 
 def override_get_db():
     try:
@@ -17,7 +20,9 @@ def override_get_db():
     finally:
         db.close()
 
+
 app.dependency_overrides[get_db] = override_get_db
+
 
 @pytest.fixture(scope="function")
 def client():
@@ -25,6 +30,7 @@ def client():
     with TestClient(app) as c:
         yield c
     Base.metadata.drop_all(bind=engine)
+
 
 class TestHealthEndpoint:
     def test_health_check(self, client):
@@ -34,12 +40,13 @@ class TestHealthEndpoint:
         assert data["status"] == "healthy"
         assert "timestamp" in data
 
+
 class TestTaskCRUD:
     def test_create_task(self, client):
         task_data = {
             "title": "Test Task",
             "description": "Test Description",
-            "priority": "high"
+            "priority": "high",
         }
         response = client.post("/api/tasks", json=task_data)
         assert response.status_code == 200
@@ -111,7 +118,7 @@ class TestTaskCRUD:
             "title": "Updated Task",
             "description": "Updated Description",
             "priority": "high",
-            "completed": True
+            "completed": True,
         }
         response = client.put(f"/api/tasks/{task_id}", json=update_data)
         assert response.status_code == 200
@@ -165,6 +172,7 @@ class TestTaskCRUD:
         assert response.status_code == 404
         assert response.json()["detail"] == "Task not found"
 
+
 class TestTaskFiltering:
     def setup_tasks(self, client):
         """Helper method to create test tasks"""
@@ -172,7 +180,7 @@ class TestTaskFiltering:
             {"title": "High Priority Task", "priority": "high", "completed": False},
             {"title": "Medium Priority Task", "priority": "medium", "completed": True},
             {"title": "Low Priority Task", "priority": "low", "completed": False},
-            {"title": "Another High Priority", "priority": "high", "completed": True}
+            {"title": "Another High Priority", "priority": "high", "completed": True},
         ]
 
         created_tasks = []
@@ -242,6 +250,7 @@ class TestTaskFiltering:
         tasks = response.json()
         assert len(tasks) == 2
 
+
 class TestTaskStats:
     def test_empty_stats(self, client):
         response = client.get("/api/stats")
@@ -259,7 +268,7 @@ class TestTaskStats:
             {"title": "Task 1", "priority": "high", "completed": False},
             {"title": "Task 2", "priority": "high", "completed": True},
             {"title": "Task 3", "priority": "medium", "completed": False},
-            {"title": "Task 4", "priority": "low", "completed": True}
+            {"title": "Task 4", "priority": "low", "completed": True},
         ]
 
         for task in tasks:
@@ -274,6 +283,7 @@ class TestTaskStats:
         assert data["pending"] == 2
         assert data["high_priority"] == 2
 
+
 class TestStaticFiles:
     def test_root_endpoint_returns_html(self, client):
         response = client.get("/")
@@ -287,6 +297,7 @@ class TestStaticFiles:
         data = response.json()
         assert "status" in data
         assert "timestamp" in data
+
 
 class TestDataValidation:
     def test_create_task_without_title_fails(self, client):

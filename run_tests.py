@@ -6,6 +6,7 @@ import subprocess
 import sys
 import os
 
+
 def run_command(cmd, description):
     """Executa um comando e mostra o resultado"""
     print(f"\n🔄 {description}")
@@ -15,6 +16,7 @@ def run_command(cmd, description):
         print(f"❌ Erro ao executar: {cmd}")
         return False
     return True
+
 
 def main():
     """Função principal"""
@@ -48,14 +50,14 @@ def main():
         # Testes com cobertura no terminal
         success = run_command(
             "pytest --cov=. --cov-report=term-missing -v",
-            "Executando testes com cobertura"
+            "Executando testes com cobertura",
         )
 
     elif option == "3":
         # Testes com cobertura + HTML
         success = run_command(
             "pytest --cov=. --cov-report=html --cov-report=term-missing -v",
-            "Executando testes com cobertura + relatório HTML"
+            "Executando testes com cobertura + relatório HTML",
         )
         if success:
             print("\n📊 Relatório HTML gerado em: htmlcov/index.html")
@@ -64,7 +66,7 @@ def main():
         # Testes com cobertura + XML
         success = run_command(
             "pytest --cov=. --cov-report=xml --cov-report=term-missing -v",
-            "Executando testes com cobertura + relatório XML"
+            "Executando testes com cobertura + relatório XML",
         )
         if success:
             print("\n📊 Relatório XML gerado em: coverage.xml")
@@ -73,7 +75,7 @@ def main():
         # Testes completos
         success = run_command(
             "pytest --cov=. --cov-report=html --cov-report=xml --cov-report=term-missing -v",
-            "Executando testes completos com todos os relatórios"
+            "Executando testes completos com todos os relatórios",
         )
         if success:
             print("\n📊 Relatórios gerados:")
@@ -90,6 +92,7 @@ def main():
     else:
         print("\n❌ Alguns testes falharam!")
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()
