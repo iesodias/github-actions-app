@@ -181,10 +181,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Build local Docker image for testing
+        run: |
+          docker build -t local-task-manager:test .
+
       - name: Start application container
         run: |
           docker run -d -p 8000:8000 --name integration-test-app \
-            ${{ secrets.DOCKERHUB_USERNAME }}/task-manager:sha-${{ github.sha }}
+            local-task-manager:test
 
       - name: Wait for application to be ready
         run: |
@@ -248,11 +252,15 @@ jobs:
         run: |
           pip install locust
 
+      - name: Build local Docker image for testing
+        run: |
+          docker build -t local-task-manager:test .
+
       - name: Run performance tests
         run: |
           # Start the application in background
           docker run -d -p 8000:8000 --name perf-test-app \
-            ${{ secrets.DOCKERHUB_USERNAME }}/task-manager:sha-${{ github.sha }}
+            local-task-manager:test
 
           # Wait for app to be ready
           timeout 60 bash -c 'until curl -f http://localhost:8000/api/health; do sleep 2; done'
