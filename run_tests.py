@@ -9,24 +9,24 @@ import sys
 
 def run_command(cmd, description):
     """Executa um comando e mostra o resultado"""
-    print(f"\n🔄 {description}")
+    print(f"\n{description}")
     print("=" * 50)
     result = subprocess.run(cmd, shell=True)
     if result.returncode != 0:
-        print(f"❌ Erro ao executar: {cmd}")
+        print(f"Erro ao executar: {cmd}")
         return False
     return True
 
 
 def main():
     """Função principal"""
-    print("🧪 DevOps Automation - Test Coverage Runner")
+    print("DevOps Automation - Test Coverage Runner")
     print("=" * 50)
 
     if len(sys.argv) > 1:
         option = sys.argv[1]
     else:
-        print("\n📋 Opções disponíveis:")
+        print("\nOpções disponíveis:")
         print("1. Testes simples")
         print("2. Testes com cobertura")
         print("3. Testes com cobertura + relatório HTML")
@@ -37,7 +37,7 @@ def main():
 
     # Verifica se estamos no diretório correto
     if not os.path.exists("main.py"):
-        print("❌ Execute este script no diretório raiz do projeto!")
+        print("Execute este script no diretório raiz do projeto!")
         sys.exit(1)
 
     success = True
@@ -60,7 +60,7 @@ def main():
             "Executando testes com cobertura + relatório HTML",
         )
         if success:
-            print("\n📊 Relatório HTML gerado em: htmlcov/index.html")
+            print("\nRelatório HTML gerado em: htmlcov/index.html")
 
     elif option == "4":
         # Testes com cobertura + XML
@@ -69,7 +69,7 @@ def main():
             "Executando testes com cobertura + relatório XML",
         )
         if success:
-            print("\n📊 Relatório XML gerado em: coverage.xml")
+            print("\nRelatório XML gerado em: coverage.xml")
 
     elif option == "5":
         # Testes completos
@@ -78,19 +78,19 @@ def main():
             "Executando testes completos com todos os relatórios",
         )
         if success:
-            print("\n📊 Relatórios gerados:")
+            print("\nRelatórios gerados:")
             print("  - HTML: htmlcov/index.html")
             print("  - XML: coverage.xml")
             print("  - Terminal: exibido acima")
 
     else:
-        print("❌ Opção inválida!")
+        print("Opção inválida!")
         sys.exit(1)
 
     if success:
-        print("\n✅ Testes executados com sucesso!")
+        print("\nTestes executados com sucesso!")
     else:
-        print("\n❌ Alguns testes falharam!")
+        print("\nAlguns testes falharam!")
         sys.exit(1)
 
 

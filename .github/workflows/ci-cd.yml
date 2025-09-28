@@ -323,13 +323,13 @@ jobs:
       - name: Notify success
         if: needs.deploy-staging.result == 'success' || needs.deploy-production.result == 'success'
         run: |
-          echo "✅ Deployment successful!"
+          echo "Deployment successful!"
           echo "Staging: ${{ needs.deploy-staging.result }}"
           echo "Production: ${{ needs.deploy-production.result }}"
 
       - name: Notify failure
         if: needs.deploy-staging.result == 'failure' || needs.deploy-production.result == 'failure'
         run: |
-          echo "❌ Deployment failed!"
+          echo "Deployment failed!"
           echo "Staging: ${{ needs.deploy-staging.result }}"
           echo "Production: ${{ needs.deploy-production.result }}"
